@@ -13,3 +13,20 @@ B.
 4. Run the Docker image as a container
 -----
 5. Configure Domain name for our deployment 
+
+
+--- SSH into EC2 instance ---
+1. Private key 
+2. username 
+3. ip address or DNS 
+
+> ssh -o StrictHostKeyChecking=no -i xxxxxx ubuntu@123.40.34.55
+
+
+
+
+Future
+1. Push to dev branch
+2. Test the code in the dev branch
+3. If the test passed, it will nerge with master branch ...
+4. ON MERGE: Run the rest of the steps in the CICD

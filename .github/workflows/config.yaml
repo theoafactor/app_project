@@ -6,7 +6,21 @@ on:
 jobs: 
   run_configuration:
     runs-on: ubuntu-latest
+    env: 
+      EC2_PRIVATE_KEY: ${{ secrets.EC2_PRIVATE_KEY }}
+      EC2_PUBLIC_DNS: ec2-50-19-142-199.compute-1.amazonaws.com
+      EC2_USERNAME: ubuntu
     steps: 
     - name: "Testing that everything works"
       run: |
         echo 'Everything works fine ...'
+
+    - name: "SSH into the EC2 instance"
+      run: |
+        echo "$EC2_PRIVATE_KEY" > ec2_private_key && chmod 600 ec2_private_key
+        ssh -o StrictHostKeyChecking=no -i ec2_private_key ${EC2_USERNAME}@${EC2_PUBLIC_DNS} '
+        
+        # Run important commands
+        sudo apt-get update
+        
+        '
