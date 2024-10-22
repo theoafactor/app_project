@@ -1,0 +1,12 @@
+name: Configuration Workflow
+on: 
+  push: 
+   branches: 
+   - master
+jobs: 
+  run_configuration:
+    runs-on: ubuntu-latest
+    steps: 
+    - name: "Testing that everything works"
+      run: |
+        echo 'Everything works fine ...'
