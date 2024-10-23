@@ -35,7 +35,7 @@ jobs:
     - name: "SSH into the EC2 instance"
       run: |
         echo "$EC2_PRIVATE_KEY" > ec2_private_key && chmod 600 ec2_private_key
-        ssh -o StrictHostKeyChecking=no -i ec2_private_key ${EC2_USERNAME}@${EC2_PUBLIC_DNS} '
+        ssh -o StrictHostKeyChecking=no -i ec2_private_key ${EC2_USERNAME}@${EC2_PUBLIC_DNS} echo $IMAGE_VERSION '
         
         # Run important commands
         sudo apt-get update
@@ -68,9 +68,9 @@ jobs:
 
         echo "About to run Docker image ..."
 
-        sudo docker stop $( sudo docker ps -a -q)
-        sudo docker rm $( sudo docker ps -a -q)
-        sudo docker rmi $( sudo docker images -q )
+        # sudo docker stop $( sudo docker ps -a -q)
+        # sudo docker rm $( sudo docker ps -a -q)
+        # sudo docker rmi $( sudo docker images -q )
 
         #echo "$IMAGE_VERSION" > app_image_version
         image_version=$( echo $IMAGE_VERSION )
