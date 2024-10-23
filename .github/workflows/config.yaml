@@ -15,6 +15,22 @@ jobs:
       run: |
         echo 'Everything works fine ...'
 
+    - name: Checkout the repository
+      uses: actions/checkout@v4
+
+    - name: "Build a Docker Image"
+      run: |
+        docker build -t theoafactor/app_project_test:1 .
+
+    - name: "Log in to Docker Hub"
+      run: |
+        docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+    
+    - name: "Push the Image to Docker Hub"
+      run: |
+        docker push theoafactor/app_project_test:1
+
+
     - name: "SSH into the EC2 instance"
       run: |
         echo "$EC2_PRIVATE_KEY" > ec2_private_key && chmod 600 ec2_private_key
