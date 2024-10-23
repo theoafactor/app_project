@@ -73,6 +73,9 @@ jobs:
         sudo docker rmi $( sudo docker images -q )
 
         #echo "$IMAGE_VERSION" > app_image_version
+        image_version=$( echo $IMAGE_VERSION )
 
-        sudo docker run -d -p 80:80 --name app_project theoafactor/app_project_test:${{ IMAGE_VERSION }}
+        echo $image_version
+        
+        #sudo docker run -d -p 80:80 --name app_project theoafactor/app_project_test:$IMAGE_VERSION
         '
