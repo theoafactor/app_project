@@ -76,6 +76,8 @@ jobs:
         image_version=$( echo $IMAGE_VERSION )
 
         echo $image_version
-        
+
+        echo "Running the container ..."
+
         #sudo docker run -d -p 80:80 --name app_project theoafactor/app_project_test:$IMAGE_VERSION
         '
