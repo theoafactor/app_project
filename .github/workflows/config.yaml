@@ -68,9 +68,9 @@ jobs:
 
         echo "About to run Docker image ..."
 
-        sudo docker stop $( sudo docker ps -a -q)
-        sudo docker rm $( sudo docker ps -a -q)
-        sudo docker rmi $( sudo docker images -q )
+        # sudo docker stop $( sudo docker ps -a -q)
+        # sudo docker rm $( sudo docker ps -a -q)
+        # sudo docker rmi $( sudo docker images -q )
 
         sudo docker run -d -p 80:80 --name app_project theoafactor/app_project_test:${IMAGE_VERSION}
         '
