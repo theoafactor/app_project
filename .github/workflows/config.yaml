@@ -72,5 +72,5 @@ jobs:
         # sudo docker rm $( sudo docker ps -a -q)
         # sudo docker rmi $( sudo docker images -q )
 
-        sudo docker run -d -p 80:80 --name app_project theoafactor/app_project_test:${IMAGE_VERSION}
+        sudo docker run -d -p 80:80 --name app_project theoafactor/app_project_test:2
         '
