@@ -10,6 +10,7 @@ jobs:
       EC2_PRIVATE_KEY: ${{ secrets.EC2_PRIVATE_KEY }}
       EC2_PUBLIC_DNS: ec2-50-19-142-199.compute-1.amazonaws.com
       EC2_USERNAME: ubuntu
+      IMAGE_VERSION: 2
     steps: 
     - name: "Testing that everything works"
       run: |
@@ -20,7 +21,7 @@ jobs:
 
     - name: "Build a Docker Image"
       run: |
-        docker build -t theoafactor/app_project_test:1 .
+        docker build -t theoafactor/app_project_test:${IMAGE_VERSION} .
 
     - name: "Log in to Docker Hub"
       run: |
@@ -28,7 +29,7 @@ jobs:
     
     - name: "Push the Image to Docker Hub"
       run: |
-        docker push theoafactor/app_project_test:1
+        docker push theoafactor/app_project_test:${IMAGE_VERSION}
 
 
     - name: "SSH into the EC2 instance"
@@ -64,4 +65,12 @@ jobs:
             echo "----- All set, Docker was installed successfully! ------"
 
         fi
+
+        echo "About to run Docker image ..."
+
+        sudo docker stop app_project && sudo docker rm app_project
+
+        sudo docker rmi $( sudo docker images -q )
+
+        sudo docker run -d -p 80:80 --name app_project theoafactor/app_project_test:${IMAGE_VERSION}
         '
