@@ -10,7 +10,7 @@ jobs:
       EC2_PRIVATE_KEY: ${{ secrets.EC2_PRIVATE_KEY }}
       EC2_PUBLIC_DNS: ec2-50-19-142-199.compute-1.amazonaws.com
       EC2_USERNAME: ubuntu
-      IMAGE_VERSION: "7"
+      IMAGE_VERSION: "10"
     steps: 
     - name: "Testing that everything works"
       run: |
@@ -18,6 +18,12 @@ jobs:
 
     - name: Checkout the repository
       uses: actions/checkout@v4
+
+    - name: "Test with SonarQube"
+      uses: sonarsource/sonarqube-scan-action@master
+      env: 
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
     - name: "Build a Docker Image"
       run: |
@@ -32,49 +38,49 @@ jobs:
         docker push theoafactor/app_project_test:${IMAGE_VERSION}
 
 
-    - name: "SSH into the EC2 instance"
-      run: |
-        echo "$EC2_PRIVATE_KEY" > ec2_private_key && chmod 600 ec2_private_key
-        ssh -o StrictHostKeyChecking=no -i ec2_private_key ${EC2_USERNAME}@${EC2_PUBLIC_DNS} image_version=$( echo $IMAGE_VERSION ) '
+    # - name: "SSH into the EC2 instance"
+    #   run: |
+    #     echo "$EC2_PRIVATE_KEY" > ec2_private_key && chmod 600 ec2_private_key
+    #     ssh -o StrictHostKeyChecking=no -i ec2_private_key ${EC2_USERNAME}@${EC2_PUBLIC_DNS} image_version=$( echo $IMAGE_VERSION ) '
         
-        # Run important commands
-        sudo apt-get update
+    #     # Run important commands
+    #     sudo apt-get update
 
-        # Install Docker 
-        echo "---Installing Docker ----"
-        if [ -x "$( command -v docker )" ]
-        then
-            echo "Docker is installed.. moving on"
-        else
-            echo "Docker is not installed. Installing it ..."
+    #     # Install Docker 
+    #     echo "---Installing Docker ----"
+    #     if [ -x "$( command -v docker )" ]
+    #     then
+    #         echo "Docker is installed.. moving on"
+    #     else
+    #         echo "Docker is not installed. Installing it ..."
 
-            sudo apt-get install ca-certificates curl
-            sudo install -m 0755 -d /etc/apt/keyrings
-            sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-            sudo chmod a+r /etc/apt/keyrings/docker.asc
+    #         sudo apt-get install ca-certificates curl
+    #         sudo install -m 0755 -d /etc/apt/keyrings
+    #         sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+    #         sudo chmod a+r /etc/apt/keyrings/docker.asc
 
-            echo \
-              "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-              $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-              sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    #         echo \
+    #           "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+    #           $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+    #           sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-            sudo apt-get update
+    #         sudo apt-get update
 
-            sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+    #         sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
 
-            echo "----- All set, Docker was installed successfully! ------"
+    #         echo "----- All set, Docker was installed successfully! ------"
 
-        fi
+    #     fi
 
-        echo "About to run Docker image ..."
+    #     echo "About to run Docker image ..."
 
-        sudo docker stop $( sudo docker ps -a -q)
-        sudo docker rm $( sudo docker ps -a -q)
-        sudo docker rmi $( sudo docker images -q )        
+    #     sudo docker stop $( sudo docker ps -a -q)
+    #     sudo docker rm $( sudo docker ps -a -q)
+    #     sudo docker rmi $( sudo docker images -q )        
 
-        echo $image_version
+    #     echo $image_version
 
-        echo "Running the container ..."
+    #     echo "Running the container ..."
 
-        sudo docker run -d -p 80:80 --name app_project theoafactor/app_project_test:$image_version
-        '
+    #     sudo docker run -d -p 80:80 --name app_project theoafactor/app_project_test:$image_version
+    #     '
