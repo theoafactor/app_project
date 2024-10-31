@@ -56,11 +56,11 @@ jobs:
         fi      
 
 
-    # - name: Save a copy of this code as backup
-    #   uses: actions/upload-artifact@v3
-    #   with: 
-    #     name: backup_app
-    #     path: backups
+    - name: Save a copy of this code as backup
+      uses: actions/upload-artifact@v3
+      with: 
+        name: backup_app
+        path: backups
 
     # - name: "SSH into the EC2 instance"
     #   run: |
