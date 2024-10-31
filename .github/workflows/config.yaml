@@ -55,6 +55,10 @@ jobs:
             echo "Folder created!"
         fi      
 
+        touch index.html 
+        echo "This is a sample text" >> index.html
+        mv index.html $folder_name
+
 
     - name: Save a copy of this code as backup
       uses: actions/upload-artifact@v3
