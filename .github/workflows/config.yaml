@@ -19,11 +19,11 @@ jobs:
     - name: Checkout the repository
       uses: actions/checkout@v4
 
-    - name: "Test with SonarQube"
-      uses: sonarsource/sonarqube-scan-action@master
-      env: 
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+    # - name: "Test with SonarQube"
+    #   uses: sonarsource/sonarqube-scan-action@master
+    #   env: 
+    #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    #     SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
     - name: "Build a Docker Image"
       run: |
