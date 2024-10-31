@@ -34,9 +34,33 @@ jobs:
         docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
     
     - name: "Push the Image to Docker Hub"
+      id: "push_image_step"
       run: |
         docker push theoafactor/app_project_test:${IMAGE_VERSION}
 
+    - name: "Create the backup folder if it does not exist"
+      run: |
+        folder_name="backups"
+
+        if [[ -d $folder_name ]]
+        then
+            sleep 3
+            echo "..."    
+            echo "Folder exists .. moving on"
+        else
+            echo "Folder does not exist"
+            echo "Creating it ..."
+            sleep 3
+            mkdir $folder_name
+            echo "Folder created!"
+        fi      
+
+
+    # - name: Save a copy of this code as backup
+    #   uses: actions/upload-artifact@v3
+    #   with: 
+    #     name: backup_app
+    #     path: backups
 
     # - name: "SSH into the EC2 instance"
     #   run: |
